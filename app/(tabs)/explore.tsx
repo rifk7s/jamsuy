@@ -1,112 +1,263 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { FontAwesome6 } from "@expo/vector-icons";
+import { useAudioPlayer } from "expo-audio";
+import { useEffect, useState } from "react";
+import {
+    Image,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+const AUDIO_SOURCE = require("../../assets/audio/gluesong.mp3");
 
 export default function TabTwoScreen() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const player = useAudioPlayer(AUDIO_SOURCE);
+
+  const handleTogglePlay = () => {
+    if (isPlaying) {
+      player.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    player.play();
+    setIsPlaying(true);
+  };
+
+  useEffect(() => {
+    return () => {
+      player.pause();
+    };
+  }, [player]);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <SafeAreaView style={styles.screen} edges={["top"]}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Newsreader-style heading — italic serif + pink underline + hellokitty */}
+        <View style={styles.headingRow}>
+          <Text style={styles.headingText}>Music Player Component</Text>
+          <Image
+            source={require("../../assets/images/hellokitty.png")}
+            style={styles.hellokittyImage}
+            resizeMode="contain"
+            accessibilityLabel="Hello Kitty"
+          />
+        </View>
+        <Text style={styles.headingSubtitle}>from: rifky.dev/archives/ui</Text>
+
+        <View style={styles.playerCard}>
+          {/* Row: image left + play button right — mirrors web flex justify-between */}
+          <View style={styles.cardRow}>
+            <Image
+              source={require("../../assets/images/gluesong.png")}
+              style={styles.coverImage}
+              resizeMode="cover"
+              accessibilityLabel="Music cover"
+            />
+            <Pressable
+              style={styles.playButton}
+              onPress={handleTogglePlay}
+              accessibilityRole="button"
+              accessibilityLabel={isPlaying ? "Pause music" : "Play music"}
+            >
+              <FontAwesome6
+                name={isPlaying ? "pause" : "play"}
+                size={12}
+                color="#ffffff"
+              />
+            </Pressable>
+          </View>
+
+          {/* Meta text below — mirrors web flex-col mt-2 */}
+          <View style={styles.metaTextWrap}>
+            <Text style={styles.songTitle}>Glue Song</Text>
+            <Text style={styles.singer}>beabadoobee</Text>
+          </View>
+        </View>
+
+        <Text style={styles.paragraphText}>
+          Glue Song is a track by Filipino-British singer-songwriter
+          beabadoobee, released in 2019. Known for its dreamy indie pop sound
+          and tender lyrics, it became one of her most beloved songs.
+        </Text>
+
+        {/* Pinkbow separator — 4 bows like the web Seperator component */}
+        <View style={styles.bowRow}>
+          {[0, 1, 2, 3].map((i) => (
+            <Image
+              key={i}
+              source={require("../../assets/images/pinkbow.png")}
+              style={styles.bowImage}
+              resizeMode="contain"
+            />
+          ))}
+        </View>
+
+        {/* Poem line above quote — mirrors web Newsreader italic centered */}
+        <Text style={styles.poemLine}>~ Lorem ipsum dolor sit amet. ~</Text>
+
+        <View style={styles.quoteCard}>
+          <Text style={styles.quoteText}>
+            "Custom Quote Component - a quote component."
+          </Text>
+        </View>
+
+        {/* Tag component */}
+        <View style={styles.tagRow}>
+          {["tag", "component", "here"].map((tag) => (
+            <View key={tag} style={styles.tagPill}>
+              <Text style={styles.tagText} numberOfLines={1}>
+                {tag}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  screen: {
+    flex: 1,
+    backgroundColor: "#f4f4f5",
   },
-  titleContainer: {
-    flexDirection: 'row',
+  content: {
+    paddingHorizontal: 16,
+    paddingTop: 48,
+    paddingBottom: 32,
+  },
+  headingRow: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
+    marginBottom: 4,
+  },
+  headingSubtitle: {
+    fontSize: 13,
+    color: "#667085",
+    marginBottom: 20,
+  },
+  headingText: {
+    flexShrink: 1,
+    fontSize: 20,
+    fontFamily: "Newsreader_400Regular_Italic",
+    textDecorationLine: "underline",
+    textDecorationColor: "#f9a8d4",
+    color: "#101828",
+    lineHeight: 28,
+  },
+  hellokittyImage: {
+    width: 36,
+    height: 36,
+    marginTop: 2,
+  },
+  playerCard: {
+    backgroundColor: "#111318",
+    borderRadius: 14,
+    padding: 8,
+    // matches web sm:w-[304px] — compact card, not full screen width
+    maxWidth: 304,
+    width: "100%",
+  },
+  cardRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 8,
+  },
+  coverImage: {
+    // web big: w-[260px] h-[260px] on mobile, sm:w-[200px] sm:h-[200px]
+    width: 200,
+    height: 200,
+    borderRadius: 12,
+  },
+  metaTextWrap: {
+    marginTop: 8,
+  },
+  songTitle: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  singer: {
+    color: "#d0d5dd",
+    fontSize: 14,
+    marginTop: 2,
+  },
+  playButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 999,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#1a2432",
+    borderWidth: 1,
+    borderColor: "#2f3743",
+  },
+  paragraphText: {
+    marginTop: 18,
+    color: "#475467",
+    fontSize: 16,
+    lineHeight: 28,
+  },
+  bowRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 12,
+    marginTop: 20,
+    marginBottom: 4,
+  },
+  bowImage: {
+    width: 32,
+    height: 32,
+  },
+  poemLine: {
+    marginTop: 20,
+    marginBottom: 6,
+    textAlign: "center",
+    fontFamily: "Newsreader_400Regular_Italic",
+    fontSize: 16,
+    color: "#344054",
+  },
+  quoteCard: {
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#d0d5dd",
+    backgroundColor: "#f8f9fb",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  quoteText: {
+    color: "#344054",
+    fontSize: 14,
+    lineHeight: 22,
+    fontFamily: "Newsreader_400Regular_Italic",
+    textAlign: "center",
+  },
+  tagRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginTop: 20,
+    marginBottom: 32,
+  },
+  tagPill: {
+    backgroundColor: "#1c2333",
+    borderRadius: 3,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+  },
+  tagText: {
+    color: "#e2e8f0",
+    fontSize: 13,
+    fontStyle: "italic",
   },
 });
