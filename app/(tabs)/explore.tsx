@@ -1,5 +1,5 @@
-import { FontAwesome6 } from "@expo/vector-icons";
 import { useAudioPlayer } from "expo-audio";
+import { SymbolView } from "expo-symbols";
 import { useEffect, useState } from "react";
 import {
     Image,
@@ -67,10 +67,10 @@ export default function TabTwoScreen() {
               accessibilityRole="button"
               accessibilityLabel={isPlaying ? "Pause music" : "Play music"}
             >
-              <FontAwesome6
-                name={isPlaying ? "pause" : "play"}
-                size={12}
-                color="#ffffff"
+              <SymbolView
+                name={isPlaying ? "pause.fill" : "play.fill"}
+                style={{ width: 14, height: 14 }}
+                tintColor="#ffffff"
               />
             </Pressable>
           </View>
@@ -90,9 +90,9 @@ export default function TabTwoScreen() {
 
         {/* Pinkbow separator — 4 bows like the web Seperator component */}
         <View style={styles.bowRow}>
-          {[0, 1, 2, 3].map((i) => (
+          {["bow-0", "bow-1", "bow-2", "bow-3"].map((id) => (
             <Image
-              key={i}
+              key={id}
               source={require("../../assets/images/pinkbow.png")}
               style={styles.bowImage}
               resizeMode="contain"
