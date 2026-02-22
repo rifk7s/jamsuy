@@ -10,9 +10,8 @@ A React Native mobile layout assignment built with **Expo** — plus a music pla
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white&style=plastic)
 ![React Compiler](https://img.shields.io/badge/React%20Compiler-enabled-brightgreen?style=plastic)
 
-<video src="assets/demo/demo.mp4" controls width="320">
-  <a href="assets/demo/demo.mp4">Watch demo video</a>
-</video>
+
+https://github.com/user-attachments/assets/3232888b-1e9c-417e-b82e-bfacac2a1c04
 
 </div>
 
