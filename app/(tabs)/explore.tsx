@@ -1,9 +1,7 @@
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import { SymbolView } from "expo-symbols";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
-  Animated,
-  Easing,
   Image,
   Pressable,
   ScrollView,
@@ -11,6 +9,14 @@ import {
   Text,
   View,
 } from "react-native";
+import Animated, {
+  cancelAnimation,
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 
@@ -30,10 +36,10 @@ function SpotifyIcon() {
 export default function TabTwoScreen() {
   const player = useAudioPlayer(AUDIO_SOURCE);
   const status = useAudioPlayerStatus(player);
-  const spinValue = useRef(new Animated.Value(0)).current;
-  const spin = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "360deg"],
+  const rotation = useSharedValue(0);
+  const spinStyle = useAnimatedStyle(() => {
+    "worklet";
+    return { transform: [{ rotate: `${rotation.get()}deg` }] };
   });
 
   const handleTogglePlay = async () => {
@@ -61,27 +67,23 @@ export default function TabTwoScreen() {
 
   useEffect(() => {
     if (!status.playing) {
-      spinValue.stopAnimation();
-      spinValue.setValue(0);
+      cancelAnimation(rotation);
+      rotation.set(0);
       return;
     }
 
-    const loop = Animated.loop(
-      Animated.timing(spinValue, {
-        toValue: 1,
-        duration: 2200,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }),
+    rotation.set(
+      withRepeat(
+        withTiming(360, { duration: 2200, easing: Easing.linear }),
+        -1,
+      ),
     );
 
-    loop.start();
-
     return () => {
-      loop.stop();
-      spinValue.setValue(0);
+      cancelAnimation(rotation);
+      rotation.set(0);
     };
-  }, [status.playing, spinValue]);
+  }, [status.playing]);
 
   return (
     <SafeAreaView style={styles.screen} edges={["top"]}>
@@ -139,10 +141,7 @@ export default function TabTwoScreen() {
               {status.playing ? (
                 <Animated.View
                   pointerEvents="none"
-                  style={[
-                    styles.spotifyIconWrap,
-                    { transform: [{ rotate: spin }] },
-                  ]}
+                  style={[styles.spotifyIconWrap, spinStyle]}
                 >
                   <SpotifyIcon />
                 </Animated.View>
