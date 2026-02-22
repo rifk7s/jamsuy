@@ -11,33 +11,20 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// Static — defined outside component so it's not recreated on every render
 const GRID_IMAGES = [
-  {
-    key: "android-bg",
-    source: require("../../assets/images/android-icon-background.png"),
-  },
-  {
-    key: "android-mono",
-    source: require("../../assets/images/android-icon-monochrome.png"),
-  },
-  { key: "react", source: require("../../assets/images/react-logo.png") },
-  {
-    key: "android-fg",
-    source: require("../../assets/images/android-icon-foreground.png"),
-  },
-  { key: "splash", source: require("../../assets/images/splash-icon.png") },
-  {
-    key: "partial",
-    source: require("../../assets/images/partial-react-logo.png"),
-  },
+  { key: "img1", source: require("../../assets/images/img/1.jpg") },
+  { key: "img2", source: require("../../assets/images/img/2.jpg") },
+  { key: "img3", source: require("../../assets/images/img/4.jpg") },
+  { key: "img4", source: require("../../assets/images/img/5.jpg") },
+  { key: "img5", source: require("../../assets/images/img/6.jpg") },
+  { key: "img6", source: require("../../assets/images/img/8.jpg") },
 ] as const;
 
-const TABS = ["Gallery", "Preview"] as const;
+const TABS = ["Button 1", "Button 2"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function HomeScreen() {
-  const [activeTab, setActiveTab] = useState<Tab>("Gallery");
+  const [activeTab, setActiveTab] = useState<Tab>("Button 1");
 
   const handleTabPress = (tab: Tab) => {
     Alert.alert("Tab Pressed", `${tab} tab is active`);
@@ -47,16 +34,12 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.screen}>
       <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: 16,
-          paddingTop: 16,
-          paddingBottom: 24,
-        }}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {/* Profile Section */}
         <View>
-          <View style={{ alignItems: "center", marginBottom: 24 }}>
+          <View style={styles.profileSection}>
             <Image
               source={require("../../assets/images/icon.png")}
               style={styles.profileImage}
@@ -67,7 +50,7 @@ export default function HomeScreen() {
           </View>
 
           {/* Tab Section */}
-          <View style={{ flexDirection: "row", gap: 10, marginBottom: 16 }}>
+          <View style={styles.tabSection}>
             {TABS.map((tab) => (
               <Pressable
                 key={tab}
@@ -86,19 +69,12 @@ export default function HomeScreen() {
           </View>
 
           {/* Content Section — 2 rows × 3 columns */}
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
-              rowGap: 10,
-            }}
-          >
+          <View style={styles.gridSection}>
             {GRID_IMAGES.map((item) => (
               <View key={item.key} style={styles.gridCell}>
                 <Image
                   source={item.source}
-                  style={{ width: "100%", height: "100%" }}
+                  style={styles.gridImage}
                   resizeMode="cover"
                   accessibilityLabel={item.key}
                 />
@@ -128,6 +104,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingBottom: 16,
   },
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 24,
+  },
+  profileSection: {
+    alignItems: "center",
+    marginBottom: 24,
+  },
   profileImage: {
     width: 110,
     height: 110,
@@ -139,6 +124,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: Colors.light.text,
   },
+  tabSection: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 16,
+  },
   tabButton: {
     flex: 1,
     paddingVertical: 13,
@@ -148,12 +138,22 @@ const styles = StyleSheet.create({
   activeTab: { backgroundColor: Colors.light.tint },
   inactiveTab: { backgroundColor: "#9e9e9e" },
   tabText: { fontWeight: "700", fontSize: 15, color: "#ffffff" },
+  gridSection: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    rowGap: 10,
+  },
   gridCell: {
     width: "32%",
     aspectRatio: 1,
     borderRadius: 10,
     overflow: "hidden",
     backgroundColor: "#3a3a3c",
+  },
+  gridImage: {
+    width: "100%",
+    height: "100%",
   },
   bottomButton: {
     marginHorizontal: 16,
