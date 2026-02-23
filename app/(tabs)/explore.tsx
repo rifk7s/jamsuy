@@ -83,7 +83,7 @@ export default function TabTwoScreen() {
       cancelAnimation(rotation);
       rotation.set(0);
     };
-  }, [status.playing]);
+  }, [status.playing, rotation]);
 
   return (
     <SafeAreaView style={styles.screen} edges={["top"]}>
@@ -173,7 +173,7 @@ export default function TabTwoScreen() {
 
         <View style={styles.quoteCard}>
           <Text style={styles.quoteText}>
-            "Custom Quote Component - a quote component."
+            {'"Custom Quote Component - a quote component."'}
           </Text>
         </View>
 
