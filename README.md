@@ -5,11 +5,11 @@
 
 A React Native mobile layout assignment built with **Expo** — plus a music player screen added for fun.
 
-![Expo](https://img.shields.io/badge/Expo-SDK%2054-000020?logo=expo&logoColor=white&style=plastic)
-![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?logo=react&logoColor=black&style=plastic)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white&style=plastic)
-![React Compiler](https://img.shields.io/badge/React%20Compiler-enabled-brightgreen?style=plastic)
-
+[![React Doctor](https://www.react.doctor/share/badge?p=mobile_ui_layout_impl&s=96&e=2&w=10&f=11)](https://www.react.doctor/share?p=mobile_ui_layout_impl&s=96&e=2&w=10&f=11)
+![Expo](https://img.shields.io/badge/Expo-SDK%2054-000020?logo=expo&logoColor=white&style=flat-square)
+![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?logo=react&logoColor=black&style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white&style=flat-square)
+![React Compiler](https://img.shields.io/badge/React%20Compiler-enabled-brightgreen?style=flat-square)
 
 https://github.com/user-attachments/assets/3232888b-1e9c-417e-b82e-bfacac2a1c04
 
